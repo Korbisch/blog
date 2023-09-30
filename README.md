@@ -1,24 +1,29 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
+How to get the application up and running:
 
 * Ruby version
 
+```3.2.2```
+
 * System dependencies
 
-* Configuration
+```bundle install```
 
-* Database creation
+[//]: # (* Configuration)
+
+[//]: # (* Database creation)
 
 * Database initialization
 
-* How to run the test suite
+```bin/rails db:migrate```
 
-* Services (job queues, cache servers, search engines, etc.)
+[//]: # (* How to run the test suite)
 
-* Deployment instructions
+[//]: # (* Services &#40;job queues, cache servers, search engines, etc.&#41;)
 
-* ...
+[//]: # (* Deployment instructions)
+
+* How to run the dev server
+
+```bin/rails server```
