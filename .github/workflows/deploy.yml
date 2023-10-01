@@ -16,7 +16,7 @@ jobs:
           passphrase: ${{secrets.SSH_PASSPHRASE}}
 
           script: |
-            TIMESTAMP=$(date +%s) # get the current timestamp as unique identifier
+            TIMESTAMP=$(date +%F_%T) # get the current timestamp as unique identifier
             DEPLOYMENT_DIR="blog${TIMESTAMP}" # create a new string for the new deployment directory name
             git clone https://github.com/Korbisch/blog.git /home/rails/${DEPLOYMENT_DIR}
             
@@ -27,10 +27,12 @@ jobs:
 #            bin/rails db:migrate
 #            exit # logout as rails user
 #            cd /
+            sudo -u rails bundle install
+            sudo -u rails bin/rails db:migrate
             
             # Change working directory to new deployment dir
-#            sed -i "s/WorkingDirectory\=.*/WorkingDirectory=\/home\/rails\/$DEPLOYMENT_DIR\//" /etc/systemd/system/rails.service
+            sed -i "s/WorkingDirectory\=.*/WorkingDirectory=\/home\/rails\/$DEPLOYMENT_DIR\//" /etc/systemd/system/rails.service
             
             # Reload and restart the rails server
-#            systemctl daemon-reload
-#            systemctl restart rails.service
+            systemctl daemon-reload
+            systemctl restart rails.service
