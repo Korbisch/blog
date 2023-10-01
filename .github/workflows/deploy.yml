@@ -19,7 +19,10 @@ jobs:
             TIMESTAMP=$(date +%F_%T) # get the current timestamp as unique identifier
             DEPLOYMENT_DIR="blog${TIMESTAMP}" # create a new string for the new deployment directory name
             git clone https://github.com/Korbisch/blog.git /home/rails/${DEPLOYMENT_DIR}
+            # give user rails permissions
+            chown -R rails:rails /home/rails/${DEPLOYMENT_DIR}
             # Setup Rails dependencies
+            cd /home/rails/${DEPLOYMENT_DIR}
             sudo -u rails bundle install
             sudo -u rails bin/rails db:migrate
             # Change working directory to new deployment dir
