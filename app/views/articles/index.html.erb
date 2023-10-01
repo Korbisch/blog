@@ -2,6 +2,8 @@
 
 Our blog has <%= Article.public_count %> articles and counting!
 
+<h2>This was deployed with github actions!</h2>
+
 <ul>
 	<% @articles.each do |article| %>
 		<% unless article.archived? %>

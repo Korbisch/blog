@@ -16,5 +16,21 @@ jobs:
           passphrase: ${{secrets.SSH_PASSPHRASE}}
 
           script: |
-            git clone https://github.com/Korbisch/blog.git /home/rails/test-deployment
-            echo 'Deployment successful to Digital Ocean'
+            TIMESTAMP=$(date +%s) # get the current timestamp as unique identifier
+            DEPLOYMENT_DIR="blog${TIMESTAMP}" # create a new string for the new deployment directory name
+            git clone https://github.com/Korbisch/blog.git /home/rails/${DEPLOYMENT_DIR}
+            
+            # Setup Rails dependencies
+            cd /home/rails/${DEPLOYMENT_DIR}
+            su - rails # login as rails user
+            bundle install
+            bin/rails db:migrate
+            exit # logout as rails user
+            cd /
+            
+            # Change working directory to new deployment dir
+            sed -i "s/WorkingDirectory\=.*/WorkingDirectory=\/home\/rails\/$DEPLOYMENT_DIR\//" /etc/systemd/system/rails.service
+            
+            # Reload and restart the rails server
+            systemctl daemon-reload
+            systemctl restart rails.service
